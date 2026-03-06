@@ -1,47 +1,50 @@
-const express = require('express');
-const { chromium } = require('playwright');
+const express = require("express");
+const playwright = require("playwright");
 
 const app = express();
+app.use(express.json());
 
-app.get('/pdf', async (req, res) => {
-
-    const url = req.query.url;
-
-    if (!url) {
-        return res.send("URL missing");
-    }
-
-    try {
-
-        const browser = await chromium.launch({
-            args: ['--no-sandbox']
-        });
-
-        const page = await browser.newPage();
-
-        await page.goto(url, {
-            waitUntil: 'networkidle'
-        });
-
-        const pdf = await page.pdf({
-            format: 'A4',
-            printBackground: true
-        });
-
-        await browser.close();
-
-        res.setHeader('Content-Type', 'application/pdf');
-        res.send(pdf);
-
-    } catch (error) {
-
-        console.log(error);
-        res.send("PDF generation failed");
-
-    }
-
+app.get("/", (req, res) => {
+res.send("PDF Microservice Running");
 });
 
-app.listen(3000, () => {
-    console.log('PDF microservice running');
+app.post("/generate-pdf", async (req, res) => {
+try {
+const { url } = req.body;
+
+```
+if (!url) {
+  return res.status(400).send("URL is required");
+}
+
+const browser = await playwright.chromium.launch();
+const page = await browser.newPage();
+
+await page.goto(url, { waitUntil: "networkidle" });
+
+const pdf = await page.pdf({
+  format: "A4",
+  printBackground: true
+});
+
+await browser.close();
+
+res.set({
+  "Content-Type": "application/pdf",
+  "Content-Disposition": "attachment; filename=itinerary.pdf"
+});
+
+res.send(pdf);
+```
+
+} catch (error) {
+console.error(error);
+res.status(500).send("PDF generation failed");
+}
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+console.log("Server running on port " + PORT);
 });
