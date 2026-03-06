@@ -10,8 +10,8 @@ res.send("PDF Microservice Running");
 
 app.get("/pdf", async (req, res) => {
 try {
-const { url } = req.body;
-
+const url = req.query.url;
+  
 ```
 if (!url) {
   return res.status(400).send("URL is required");
