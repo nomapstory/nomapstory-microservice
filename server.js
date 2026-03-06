@@ -17,7 +17,9 @@ if (!url) {
   return res.status(400).send("URL is required");
 }
 
-const browser = await playwright.chromium.launch();
+const browser = await playwright.chromium.launch({
+  args: ['--no-sandbox', '--disable-setuid-sandbox']
+});
 const page = await browser.newPage();
 
 await page.goto(url, { waitUntil: "networkidle" });
