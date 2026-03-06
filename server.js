@@ -8,7 +8,7 @@ app.get("/", (req, res) => {
 res.send("PDF Microservice Running");
 });
 
-app.post("/generate-pdf", async (req, res) => {
+app.get("/pdf", async (req, res) => {
 try {
 const { url } = req.body;
 
