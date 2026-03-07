@@ -16,8 +16,7 @@ app.get("/pdf", async (req, res) => {
     }
 
     const browser = await playwright.chromium.launch({
-  args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  executablePath: "/usr/bin/chromium-browser"
+  args: ["--no-sandbox", "--disable-setuid-sandbox"]
 });
     const page = await browser.newPage();
 
