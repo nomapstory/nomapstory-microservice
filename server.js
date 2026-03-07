@@ -9,6 +9,7 @@ app.get("/", (req, res) => {
 
 app.get("/pdf", async (req, res) => {
   try {
+
     const url = req.query.url;
 
     if (!url) {
@@ -16,13 +17,15 @@ app.get("/pdf", async (req, res) => {
     }
 
     const browser = await playwright.chromium.launch({
-  headless: true,
-  args: ["--no-sandbox", "--disable-setuid-sandbox"]
-});
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    });
+
     const page = await browser.newPage();
 
-   await page.goto(url, { waitUntil: "load", timeout: 0 });
-await page.waitForTimeout(3000);
+    await page.goto(url, { waitUntil: "load", timeout: 0 });
+
+    await page.waitForTimeout(3000);
 
     const pdf = await page.pdf({
       format: "A4",
