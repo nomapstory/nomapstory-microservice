@@ -1,5 +1,5 @@
 const express = require("express");
-const playwright = require("playwright");
+const { chromium } = require("playwright-core");
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.get("/pdf", async (req, res) => {
       return res.status(400).send("URL is required");
     }
 
-    const browser = await playwright.chromium.launch({
+    const browser = await chromium.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"]
     });
