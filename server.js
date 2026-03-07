@@ -20,7 +20,8 @@ app.get("/pdf", async (req, res) => {
 });
     const page = await browser.newPage();
 
-    await page.goto(url, { waitUntil: "networkidle" });
+   await page.goto(url, { waitUntil: "load", timeout: 0 });
+await page.waitForTimeout(3000);
 
     const pdf = await page.pdf({
       format: "A4",
